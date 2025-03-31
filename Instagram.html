@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Widget Instagram</title>
+  <style>
+    /* Reset e estilos base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .widget {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 320px;
+      text-align: center;
+    }
+    .widget h2 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+    .follower-count {
+      font-size: 3rem;
+      color: #E1306C;
+      margin-bottom: 20px;
+      animation: fadeInUp 1.5s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .btn {
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      color: #fff;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn-follow {
+      background: #E1306C;
+    }
+    .btn-follow:hover {
+      background: #C1275D;
+    }
+    .btn-share {
+      background: #405de6;
+    }
+    .btn-share:hover {
+      background: #314ac0;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <h2>Seguidores no Instagram</h2>
+    <div class="follower-count" id="followerCount">0</div>
+    <div class="buttons">
+      <button class="btn btn-follow" id="followBtn">Seguir no Instagram</button>
+      <button class="btn btn-share" id="shareBtn">Compartilhar Perfil</button>
+    </div>
+  </div>
+
+  <script>
+    // Configuração: URL do seu perfil no Instagram
+    const instagramProfile = 'https://www.instagram.com/a4rth_ur/';
+    
+    // Simulação de contador de seguidores
+    // Substitua targetCount por um valor dinâmico, se obtiver via API ou backend
+    let currentCount = 0;
+    const targetCount = 31; // Exemplo de número de seguidores
+    const duration = 2000; // duração em milissegundos para a animação
+    const intervalTime = 30;
+    const increment = Math.ceil(targetCount / (duration / intervalTime));
+    
+    const countElem = document.getElementById('followerCount');
+    const counterInterval = setInterval(() => {
+      currentCount += increment;
+      if (currentCount >= targetCount) {
+        currentCount = targetCount;
+        clearInterval(counterInterval);
+      }
+      countElem.textContent = currentCount.toLocaleString('pt-BR');
+    }, intervalTime);
+    
+    // Ação do botão "Seguir no Instagram"
+    document.getElementById('followBtn').addEventListener('click', () => {
+      window.open(instagramProfile, '_blank');
+    });
+    
+    // Ação do botão "Compartilhar Perfil"
+    document.getElementById('shareBtn').addEventListener('click', async () => {
+      const shareData = {
+        title: 'Meu Instagram',
+        text: 'Confira meu perfil no Instagram!',
+        url: instagramProfile,
+      };
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          console.log('Compartilhado com sucesso!');
+        } else {
+          // Fallback para navegadores que não suportam o Web Share API
+          await navigator.clipboard.writeText(instagramProfile);
+          alert('Link copiado para a área de transferência!');
+        }
+      } catch (err) {
+        console.error('Erro ao compartilhar:', err);
+      }
+    });
+  </script>
+</body>
+</html>
