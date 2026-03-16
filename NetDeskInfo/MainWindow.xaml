@@ -1,0 +1,184 @@
+<Window x:Class="NetDeskInfo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="clr-namespace:NetDeskInfo.Converters"
+        mc:Ignorable="d"
+        Title="NetDeskInfo - Monitor de Rede e Sistema"
+        Width="1220"
+        Height="760"
+        MinWidth="980"
+        MinHeight="660"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <conv:HexToBrushConverter x:Key="HexToBrushConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+
+        <Style x:Key="LabelTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="0,8,0,2" />
+        </Style>
+
+        <Style x:Key="ValueTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16" Opacity="0">
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.35" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Style="{StaticResource CardBorderStyle}">
+            <DockPanel>
+                <StackPanel Orientation="Vertical" DockPanel.Dock="Left">
+                    <TextBlock FontSize="28" FontWeight="Bold" Text="🛰️ NetDeskInfo" />
+                    <TextBlock Foreground="{StaticResource TextSecondaryBrush}" Text="Informações de rede, localização e sistema em tempo real." />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource PrimaryButtonStyle}" Content="🔄 Atualizar dados" Command="{Binding RefreshDataCommand}" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="20" FontWeight="SemiBold" Text="🌐 Rede" />
+
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="IP público"/>
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding PublicIp}" DockPanel.Dock="Left"/>
+                            <Button Style="{StaticResource SecondaryButtonStyle}" Content="Copiar" Command="{Binding CopyCommand}" CommandParameter="{Binding PublicIp}" HorizontalAlignment="Right" />
+                        </DockPanel>
+
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="IPv4 público"/>
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding PublicIpv4}"/>
+                            <Button Style="{StaticResource SecondaryButtonStyle}" Content="Copiar" Command="{Binding CopyCommand}" CommandParameter="{Binding PublicIpv4}" HorizontalAlignment="Right"/>
+                        </DockPanel>
+
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="IPv6 público"/>
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding PublicIpv6}"/>
+                            <Button Style="{StaticResource SecondaryButtonStyle}" Content="Copiar" Command="{Binding CopyCommand}" CommandParameter="{Binding PublicIpv6}" HorizontalAlignment="Right"/>
+                        </DockPanel>
+
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="IP local"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding LocalIp}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Máscara de rede"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Netmask}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Gateway"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Gateway}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Adaptador"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding AdapterName}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="DNS"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding DnsServers}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Status da conexão"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding ConnectionStatus}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource CardBorderStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="20" FontWeight="SemiBold" Text="📍 Localização aproximada" />
+                        <TextBlock Foreground="{StaticResource WarningBrush}" Text="{Binding ApproximationNote}" Margin="0,6,0,8"/>
+
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="País"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Country}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Estado / Região"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Region}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Cidade"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding City}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="CEP"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding PostalCode}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Latitude / Longitude"/>
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Latitude}" />
+                            <TextBlock Style="{StaticResource ValueTextStyle}" Text=", " Margin="4,0" />
+                            <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Longitude}" />
+                            <Button Style="{StaticResource SecondaryButtonStyle}" Content="Copiar" HorizontalAlignment="Right"
+                                    Command="{Binding CopyCommand}" CommandParameter="{Binding LocationSummary}"/>
+                        </DockPanel>
+
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Fuso horário"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Timezone}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="ISP / Provedor"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Isp}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="20" FontWeight="SemiBold" Text="💻 Sistema" />
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Sistema operacional"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding OperatingSystem}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Versão"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding OsVersion}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Build"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Build}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Arquitetura"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Architecture}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Nome da máquina"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding MachineName}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Usuário atual"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding UserName}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Tempo ligado"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Uptime}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource CardBorderStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="20" FontWeight="SemiBold" Text="🧩 Dispositivo" />
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Modelo"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding DeviceModel}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Processador"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding Processor}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="RAM total"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding TotalRam}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="RAM em uso"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding UsedRam}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Núcleos / Threads"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding CoresThreads}"/>
+                        <TextBlock Style="{StaticResource LabelTextStyle}" Text="Host"/>
+                        <TextBlock Style="{StaticResource ValueTextStyle}" Text="{Binding HostName}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Style="{StaticResource CardBorderStyle}" Margin="8,12,8,0" Padding="12">
+            <DockPanel>
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{Binding StatusColorHex, Converter={StaticResource HexToBrushConverter}}" FontWeight="SemiBold" />
+                <ProgressBar Width="180" Height="8" Margin="12,0,0,0" IsIndeterminate="True" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibility}}" />
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>
