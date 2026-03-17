@@ -1,0 +1,8 @@
+@model GitHubPageViewModel
+<h2>GitHub</h2>
+<form method="get" class="d-flex gap-2 mb-3">
+  <input class="form-control" name="username" value="@Model.Username" placeholder="Username" />
+  <button class="btn btn-primary">Buscar</button>
+</form>
+@if(!string.IsNullOrWhiteSpace(Model.Mensagem)){<div class="alert alert-info">@Model.Mensagem</div>}
+@foreach(var r in Model.Repos){<div class="card-pro p-3 mb-2"><a href="@r.Url" target="_blank">@r.Name</a><div>@r.Description</div><small>@r.Language • ⭐@r.Stars • @r.UpdatedAt.ToString("dd/MM/yyyy")</small></div>}

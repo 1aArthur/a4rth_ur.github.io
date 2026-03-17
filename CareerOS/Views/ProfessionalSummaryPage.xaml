@@ -1,0 +1,15 @@
+<Page x:Class="CareerOS.Views.ProfessionalSummaryPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Padding="20" RowSpacing="10">
+        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+        <TextBlock Text="Resumo Profissional" FontSize="28" FontWeight="Bold"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+            <TextBox Width="220" PlaceholderText="GitHub username" Text="{Binding GithubUsername, Mode=TwoWay}"/>
+            <Button Content="Gerar" Command="{Binding GenerateCommand}"/>
+        </StackPanel>
+        <TextBox Grid.Row="2" Text="{Binding Text, Mode=TwoWay}" TextWrapping="Wrap" AcceptsReturn="True" MinHeight="220"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="8">
+            <Button Content="Copiar" Command="{Binding CopyCommand}"/>
+            <Button Content="Exportar TXT" Command="{Binding ExportTxtCommand}"/>
+        </StackPanel>
+    </Grid>
+</Page>

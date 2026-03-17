@@ -1,0 +1,10 @@
+@model SummaryPageViewModel
+<h2>Resumo Profissional</h2>
+<form method="post" asp-action="Generate" class="d-flex gap-2 mb-3">
+  <input class="form-control" name="Username" value="@Model.Username" placeholder="Username GitHub" />
+  <button class="btn btn-primary">Gerar</button>
+</form>
+<form method="post" asp-action="ExportTxt">
+  <textarea class="form-control mb-2" rows="8" name="Texto">@Model.Texto</textarea>
+  <button class="btn btn-accent">Exportar TXT</button>
+</form>

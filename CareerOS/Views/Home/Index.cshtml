@@ -1,0 +1,16 @@
+@model DashboardViewModel
+<h2 class="mb-3">Dashboard</h2>
+<div class="row g-3">
+  <div class="col-md-3"><div class="card-pro p-3"><div>Horas semana</div><div class="metric">@Model.HorasSemana</div></div></div>
+  <div class="col-md-3"><div class="card-pro p-3"><div>Sessões</div><div class="metric">@Model.SessoesConcluidas</div></div></div>
+  <div class="col-md-3"><div class="card-pro p-3"><div>Matérias ativas</div><div class="metric">@Model.MateriasAtivas</div></div></div>
+  <div class="col-md-3"><div class="card-pro p-3"><div>Exercícios</div><div class="metric">@Model.ExerciciosResolvidos</div></div></div>
+</div>
+<div class="card-pro p-3 mt-3">
+  <div>Meta semanal: @Model.MetaPercentual%</div>
+  <div class="progress mt-2"><div class="progress-bar" style="width:@Model.MetaPercentual%"></div></div>
+</div>
+<div class="row g-3 mt-1">
+  <div class="col-lg-6"><div class="card-pro p-3"><h5>Progresso por matéria</h5>@foreach(var p in Model.ProgressoPorMateria){<div>@p.Key - @p.Value%</div>}</div></div>
+  <div class="col-lg-6"><div class="card-pro p-3"><h5>Últimos projetos GitHub</h5>@if(!Model.UltimosRepos.Any()){<p>Configure o username em GitHub.</p>}else{@foreach(var r in Model.UltimosRepos){<div><a href="@r.Url" target="_blank">@r.Name</a> (@r.Language) ⭐@r.Stars</div>}}</div></div>
+</div>
