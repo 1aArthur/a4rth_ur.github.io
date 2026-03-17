@@ -1,0 +1,15 @@
+@model List<Subject>
+<h2>Estudos</h2>
+<div class="card-pro p-3 mb-3">
+<form method="post" asp-action="Create" class="row g-2">
+  <div class="col-md-3"><input class="form-control" name="Nome" placeholder="Matéria" required /></div>
+  <div class="col-md-2"><input class="form-control" name="Assunto" placeholder="Assunto" /></div>
+  <div class="col-md-2"><input class="form-control" name="Subtopicos" placeholder="Subtópicos" /></div>
+  <div class="col-md-2"><select class="form-select" name="Prioridade"><option>Baixa</option><option selected>Media</option><option>Alta</option></select></div>
+  <div class="col-md-2"><input class="form-control" type="date" name="Prazo" /></div>
+  <div class="col-md-1"><button class="btn btn-primary w-100">+</button></div>
+</form>
+</div>
+<table class="table table-dark table-striped"><thead><tr><th>Matéria</th><th>Assunto</th><th>Status</th><th>Prioridade</th><th>Domínio</th></tr></thead><tbody>
+@foreach(var s in Model){<tr><td>@s.Nome</td><td>@s.Assunto</td><td>@s.Status</td><td>@s.Prioridade</td><td>@s.NivelDominio%</td></tr>}
+</tbody></table>

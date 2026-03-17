@@ -1,0 +1,17 @@
+@model List<PracticeRecord>
+<h2>Prática técnica</h2>
+<div class="card-pro p-3 mb-3">
+<form method="post" asp-action="Create" class="row g-2">
+  <div class="col-md-2"><input class="form-control" name="Plataforma" placeholder="Plataforma" /></div>
+  <div class="col-md-2"><input class="form-control" name="Titulo" placeholder="Título" required /></div>
+  <div class="col-md-2"><input class="form-control" name="Tema" placeholder="Tema" /></div>
+  <div class="col-md-1"><input class="form-control" name="Dificuldade" placeholder="Nível" /></div>
+  <div class="col-md-1"><input class="form-control" name="Linguagem" value="C#" /></div>
+  <div class="col-md-1"><input class="form-control" type="number" name="TempoMinutos" value="30" /></div>
+  <div class="col-md-2"><input class="form-control" name="Link" placeholder="Link opcional" /></div>
+  <div class="col-md-1"><button class="btn btn-primary w-100">+</button></div>
+</form>
+</div>
+<table class="table table-dark"><thead><tr><th>Título</th><th>Tema</th><th>Dificuldade</th><th>Linguagem</th><th>Status</th></tr></thead><tbody>
+@foreach(var r in Model){<tr><td>@r.Titulo</td><td>@r.Tema</td><td>@r.Dificuldade</td><td>@r.Linguagem</td><td>@r.Status</td></tr>}
+</tbody></table>

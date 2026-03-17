@@ -1,34 +1,40 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
-    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
-    <RootNamespace>CareerOS</RootNamespace>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Platforms>x86;x64;arm64</Platforms>
-    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
-    <UseWinUI>true</UseWinUI>
-    <EnableMsixTooling>true</EnableMsixTooling>
-    <WindowsPackageType>None</WindowsPackageType>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <PublishTrimmed>false</PublishTrimmed>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CareerOS</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.4" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Controllers/HomeController.cs" />
+    <Compile Include="Controllers/StudiesController.cs" />
+    <Compile Include="Controllers/SessionsController.cs" />
+    <Compile Include="Controllers/PracticeController.cs" />
+    <Compile Include="Controllers/GoalsController.cs" />
+    <Compile Include="Controllers/GitHubController.cs" />
+    <Compile Include="Controllers/ProfessionalSummaryController.cs" />
+    <Compile Include="Controllers/SettingsController.cs" />
+    <Compile Include="Data/AppDbContext.cs" />
+    <Compile Include="Models/Entities.cs" />
+    <Compile Include="Services/StudyService.cs" />
+    <Compile Include="Services/PracticeService.cs" />
+    <Compile Include="Services/GoalService.cs" />
+    <Compile Include="Services/GitHubService.cs" />
+    <Compile Include="Services/SummaryService.cs" />
+    <Compile Include="ViewModels/PageViewModels.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Content Include="Views/**/*.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="wwwroot/**" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
   </ItemGroup>
 </Project>

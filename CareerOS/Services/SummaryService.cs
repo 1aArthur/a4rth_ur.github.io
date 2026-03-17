@@ -2,16 +2,20 @@ using CareerOS.Models;
 
 namespace CareerOS.Services;
 
-public class SummaryService
+public interface ISummaryService
 {
-    public string BuildProfessionalSummary(IEnumerable<Subject> subjects, IEnumerable<PracticeRecord> practices, IEnumerable<GitHubRepo> repos)
-    {
-        var subjectList = subjects.Select(s => s.Name).Distinct().Take(4);
-        var techList = practices.Select(p => p.Language).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().Take(5);
-        var solved = practices.Count(p => p.Status == ExerciseStatus.Solved);
-        var projectCount = repos.Count();
+    string Generate(IEnumerable<Subject> subjects, IEnumerable<PracticeRecord> practices, IEnumerable<GitHubRepo> repos);
+}
 
-        return $"Estudante de Ciência da Computação com foco em {string.Join(", ", subjectList)}. " +
-               $"Possui prática em {string.Join(", ", techList)} com {solved} exercícios resolvidos e {projectCount} projetos no GitHub.";
+public class SummaryService : ISummaryService
+{
+    public string Generate(IEnumerable<Subject> subjects, IEnumerable<PracticeRecord> practices, IEnumerable<GitHubRepo> repos)
+    {
+        var materias = string.Join(", ", subjects.Select(x => x.Nome).Distinct().Take(4));
+        var tecs = string.Join(", ", practices.Select(x => x.Linguagem).Distinct().Take(5));
+        var exercicios = practices.Count(x => x.Status == ExerciseStatus.Resolvido);
+        var projetos = repos.Count();
+
+        return $"Estudante de Ciência da Computação com foco em {materias}, prática em {tecs}, {exercicios} exercícios resolvidos e {projetos} projetos no GitHub.";
     }
 }

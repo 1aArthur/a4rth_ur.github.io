@@ -1,45 +1,46 @@
-using System.Net.Http.Headers;
 using System.Text.Json;
 using CareerOS.Models;
 
 namespace CareerOS.Services;
 
-public class GitHubService
+public interface IGitHubService
 {
-    private readonly HttpClient _httpClient = new();
+    Task<List<GitHubRepo>> GetReposAsync(string username);
+}
 
-    public GitHubService()
+public class GitHubService : IGitHubService
+{
+    private readonly HttpClient _httpClient;
+    public GitHubService(HttpClient httpClient)
     {
-        _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("CareerOS", "1.0"));
+        _httpClient = httpClient;
+        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("CareerOSWeb/1.0");
     }
 
     public async Task<List<GitHubRepo>> GetReposAsync(string username)
     {
-        if (string.IsNullOrWhiteSpace(username)) return new();
+        if (string.IsNullOrWhiteSpace(username)) return [];
 
-        var response = await _httpClient.GetAsync($"https://api.github.com/users/{username}/repos?sort=updated");
-        if (!response.IsSuccessStatusCode)
+        try
         {
-            return new();
-        }
+            var response = await _httpClient.GetAsync($"https://api.github.com/users/{username}/repos?sort=updated");
+            if (!response.IsSuccessStatusCode) return [];
 
-        var json = await response.Content.ReadAsStringAsync();
-        using var doc = JsonDocument.Parse(json);
-        var repos = new List<GitHubRepo>();
-
-        foreach (var item in doc.RootElement.EnumerateArray())
-        {
-            repos.Add(new GitHubRepo
+            await using var stream = await response.Content.ReadAsStreamAsync();
+            using var doc = await JsonDocument.ParseAsync(stream);
+            return doc.RootElement.EnumerateArray().Select(x => new GitHubRepo
             {
-                Name = item.GetProperty("name").GetString() ?? string.Empty,
-                Description = item.GetProperty("description").GetString() ?? "Sem descrição",
-                Language = item.TryGetProperty("language", out var lang) ? lang.GetString() ?? "N/A" : "N/A",
-                Stars = item.GetProperty("stargazers_count").GetInt32(),
-                UpdatedAt = item.GetProperty("updated_at").GetDateTime(),
-                HtmlUrl = item.GetProperty("html_url").GetString() ?? string.Empty
-            });
+                Name = x.GetProperty("name").GetString() ?? string.Empty,
+                Description = x.GetProperty("description").GetString() ?? "Sem descrição",
+                Language = x.TryGetProperty("language", out var l) ? l.GetString() ?? "N/A" : "N/A",
+                Stars = x.GetProperty("stargazers_count").GetInt32(),
+                UpdatedAt = x.GetProperty("updated_at").GetDateTime(),
+                Url = x.GetProperty("html_url").GetString() ?? string.Empty
+            }).OrderByDescending(x => x.Stars).ThenByDescending(x => x.UpdatedAt).ToList();
         }
-
-        return repos.OrderByDescending(r => r.Stars).ThenByDescending(r => r.UpdatedAt).ToList();
+        catch
+        {
+            return [];
+        }
     }
 }

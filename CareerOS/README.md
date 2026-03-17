@@ -1,55 +1,37 @@
-# Career OS (WinUI 3 + .NET 8)
+# Career OS Web (ASP.NET Core MVC + .NET 8)
 
-Aplicativo desktop para estudantes de Ciência da Computação organizarem estudos, prática técnica e evolução profissional.
+Site profissional para acompanhar estudos, sessões, pomodoro, prática técnica, metas, GitHub e gerar resumo profissional.
 
-## Requisitos
-- Windows 10/11
-- Visual Studio 2022 17.8+
-- Workload: **Desenvolvimento de aplicativos para desktop com C#**
-- Windows App SDK runtime
-- SDK do .NET 8
+## Stack
+- C#
+- .NET 8
+- ASP.NET Core MVC
+- SQLite (EF Core)
+- Arquitetura em camadas: Controllers, Services, Data, Models, ViewModels, Views
 
-## Como executar no Visual Studio
-1. Abra `CareerOS.csproj` no Visual Studio.
-2. Restaure os pacotes NuGet.
-3. Selecione `x64` e execute (F5).
+## Funcionalidades
+- Dashboard com métricas e progresso
+- Estudos (matérias/tópicos)
+- Sessões de estudo + Pomodoro
+- Prática de programação
+- Metas semanais/mensais
+- Integração GitHub
+- Resumo profissional com exportação TXT
+- Configurações visuais (tema escuro)
 
-## Gerar o `.exe` (publicação local)
-No Windows PowerShell:
+## Como rodar
+```bash
+cd CareerOS
+dotnet restore
+dotnet run
+```
 
+Acesse: `http://localhost:5000` (ou porta exibida no terminal).
+
+## Publicar para Windows
 ```powershell
 cd CareerOS\scripts
 .\build-exe.ps1 win-x64
 ```
 
-Ou no Prompt:
-
-```bat
-cd CareerOS\scripts
-build-exe.bat win-x64
-```
-
-Saída:
-- `CareerOS\bin\publish\win-x64\CareerOS.exe`
-
-## Gerar build automaticamente (GitHub Actions)
-O workflow `CareerOS/.github/workflows/windows-build.yml` compila e publica o app em runner Windows e gera artifact baixável com o executável.
-
-## Módulos
-- Dashboard
-- Estudos
-- Sessões
-- Pomodoro
-- Prática
-- Metas
-- GitHub
-- Resumo Profissional
-- Configurações
-
-## Persistência
-SQLite local no caminho:
-`%LocalAppData%\CareerOS\careeros.db`
-
-## Observações
-- Se a API do GitHub falhar, o app continua funcionando e mostra feedback amigável.
-- O resumo profissional pode ser editado, copiado e exportado para TXT.
+Saída em: `CareerOS\bin\publish\win-x64\`

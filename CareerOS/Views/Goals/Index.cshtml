@@ -1,0 +1,12 @@
+@model List<Goal>
+<h2>Metas</h2>
+<div class="card-pro p-3 mb-3">
+<form method="post" asp-action="Create" class="row g-2">
+  <div class="col-md-4"><input class="form-control" name="Nome" placeholder="Meta (horas/exercícios/projetos/commits)" /></div>
+  <div class="col-md-2"><select class="form-select" name="Periodo"><option>Semanal</option><option>Mensal</option></select></div>
+  <div class="col-md-2"><input class="form-control" type="number" name="Meta" placeholder="Meta" /></div>
+  <div class="col-md-2"><input class="form-control" type="number" name="Atual" placeholder="Atual" value="0" /></div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Adicionar</button></div>
+</form>
+</div>
+@foreach(var g in Model){ var pct = g.Meta == 0 ? 0 : (int)((double)g.Atual/g.Meta*100); <div class="card-pro p-3 mb-2"><strong>@g.Nome</strong> - @g.Atual/@g.Meta (@pct%)<div class="progress mt-2"><div class="progress-bar" style="width:@pct%"></div></div></div> }

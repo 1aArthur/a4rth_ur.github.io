@@ -1,35 +1,20 @@
-name: Build CareerOS (Windows)
-
+name: Build CareerOS Website (Windows)
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'CareerOS/**'
-
+    paths: ["CareerOS/**"]
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup .NET 8
-        uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-
-      - name: Restore
-        run: dotnet restore CareerOS/CareerOS.csproj
-
-      - name: Build
-        run: dotnet build CareerOS/CareerOS.csproj -c Release --no-restore
-
-      - name: Publish Win-x64 EXE
-        run: dotnet publish CareerOS/CareerOS.csproj -c Release -r win-x64 --self-contained true /p:WindowsAppSDKSelfContained=true /p:PublishSingleFile=false -o CareerOS/bin/publish/win-x64
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - run: dotnet restore CareerOS/CareerOS.csproj
+      - run: dotnet build CareerOS/CareerOS.csproj -c Release --no-restore
+      - run: dotnet publish CareerOS/CareerOS.csproj -c Release -r win-x64 --self-contained true -o CareerOS/bin/publish/win-x64
+      - uses: actions/upload-artifact@v4
         with:
-          name: CareerOS-win-x64
+          name: CareerOSWebsite-win-x64
           path: CareerOS/bin/publish/win-x64

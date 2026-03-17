@@ -1,0 +1,24 @@
+@model List<StudySession>
+<h2>Sessões de estudo</h2>
+<div class="card-pro p-3 mb-3">
+<form method="post" asp-action="Create" class="row g-2">
+  <div class="col-md-4"><input class="form-control" name="Topico" placeholder="Tópico" required /></div>
+  <div class="col-md-2"><input class="form-control" type="number" name="DuracaoMinutos" value="25" /></div>
+  <div class="col-md-2"><select class="form-select" name="TipoSessao"><option>Leitura</option><option>Exercicios</option><option>Revisao</option><option>Projeto</option></select></div>
+  <div class="col-md-3"><input class="form-control" name="Observacoes" placeholder="Observações" /></div>
+  <div class="col-md-1"><button class="btn btn-primary w-100">+</button></div>
+</form>
+</div>
+<div class="card-pro p-3 mb-3" id="pomodoro">
+  <h4>Pomodoro</h4>
+  <div class="d-flex gap-2 align-items-center">
+    <input id="pomodoro-min" class="form-control" style="max-width:120px" type="number" value="25" />
+    <div id="pomodoro-display" class="metric">25:00</div>
+    <button class="btn btn-primary" onclick="startPomodoro()" type="button">Iniciar</button>
+    <button class="btn btn-secondary" onclick="pausePomodoro()" type="button">Pausar</button>
+    <button class="btn btn-accent" onclick="resetPomodoro()" type="button">Reiniciar</button>
+  </div>
+</div>
+<table class="table table-dark"><thead><tr><th>Data</th><th>Tópico</th><th>Duração</th><th>Tipo</th></tr></thead><tbody>
+@foreach(var s in Model){<tr><td>@s.Data.ToString("dd/MM/yyyy HH:mm")</td><td>@s.Topico</td><td>@s.DuracaoMinutos min</td><td>@s.TipoSessao</td></tr>}
+</tbody></table>
