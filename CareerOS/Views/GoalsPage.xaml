@@ -1,0 +1,23 @@
+<Page x:Class="CareerOS.Views.GoalsPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Padding="20" RowSpacing="10">
+        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+        <TextBlock Text="Metas" FontSize="28" FontWeight="Bold"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+            <TextBox Width="250" PlaceholderText="Nome da meta" Text="{Binding Name, Mode=TwoWay}"/>
+            <NumberBox Width="120" Value="{Binding TargetValue, Mode=TwoWay}"/>
+            <Button Content="Adicionar" Command="{Binding AddCommand}"/>
+        </StackPanel>
+        <ListView Grid.Row="2" ItemsSource="{Binding Goals}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="{Binding Name}" Width="220"/>
+                        <TextBlock Text="{Binding CurrentValue}"/>
+                        <TextBlock Text="/"/>
+                        <TextBlock Text="{Binding TargetValue}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>

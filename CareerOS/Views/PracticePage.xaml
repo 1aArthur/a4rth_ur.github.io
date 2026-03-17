@@ -1,0 +1,23 @@
+<Page x:Class="CareerOS.Views.PracticePage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Padding="20" RowSpacing="10">
+        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+        <TextBlock Text="Prática de Programação" FontSize="28" FontWeight="Bold"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+            <TextBox Width="220" PlaceholderText="Título" Text="{Binding Title, Mode=TwoWay}"/>
+            <TextBox Width="180" PlaceholderText="Tema" Text="{Binding Theme, Mode=TwoWay}"/>
+            <Button Content="Adicionar" Command="{Binding AddCommand}"/>
+        </StackPanel>
+        <ListView Grid.Row="2" ItemsSource="{Binding Records}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="{Binding Title}" Width="220"/>
+                        <TextBlock Text="{Binding Theme}" Width="130"/>
+                        <TextBlock Text="{Binding Difficulty}" Width="100"/>
+                        <TextBlock Text="{Binding Language}" Width="100"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>
