@@ -11,13 +11,15 @@ public class HomeController : Controller
     private readonly IPracticeService _practiceService;
     private readonly IGoalService _goalService;
     private readonly IGitHubService _gitHubService;
+    private readonly IConfiguration _configuration;
 
-    public HomeController(IStudyService studyService, IPracticeService practiceService, IGoalService goalService, IGitHubService gitHubService)
+    public HomeController(IStudyService studyService, IPracticeService practiceService, IGoalService goalService, IGitHubService gitHubService, IConfiguration configuration)
     {
         _studyService = studyService;
         _practiceService = practiceService;
         _goalService = goalService;
         _gitHubService = gitHubService;
+        _configuration = configuration;
     }
 
     public async Task<IActionResult> Index()
@@ -40,8 +42,14 @@ public class HomeController : Controller
             ProgressoPorMateria = subjects.ToDictionary(x => x.Nome, x => x.NivelDominio)
         };
 
-        var user = HttpContext.Session.GetString("github_user") ?? string.Empty;
-        vm.UltimosRepos = (await _gitHubService.GetReposAsync(user)).Take(5).ToList();
+        var configured = _configuration["GitHub:DefaultUsername"] ?? string.Empty;
+        var user = HttpContext.Session.GetString("github_user") ?? configured;
+
+        if (InputValidator.IsValidGitHubUsername(user))
+        {
+            vm.UltimosRepos = (await _gitHubService.GetReposAsync(user)).Take(5).ToList();
+        }
+
         return View(vm);
     }
 

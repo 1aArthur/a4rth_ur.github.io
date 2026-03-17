@@ -14,7 +14,12 @@ public class StudiesController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(Subject model)
     {
-        if (string.IsNullOrWhiteSpace(model.Nome)) return RedirectToAction(nameof(Index));
+        if (!ModelState.IsValid) return RedirectToAction(nameof(Index));
+
+        model.Nome = InputValidator.Safe(model.Nome, 80);
+        model.Assunto = InputValidator.Safe(model.Assunto, 120);
+        model.Subtopicos = InputValidator.Safe(model.Subtopicos, 400);
+
         await _service.AddSubjectAsync(model);
         return RedirectToAction(nameof(Index));
     }

@@ -24,6 +24,7 @@
     <Compile Include="Services/GoalService.cs" />
     <Compile Include="Services/GitHubService.cs" />
     <Compile Include="Services/SummaryService.cs" />
+    <Compile Include="Services/InputValidator.cs" />
     <Compile Include="ViewModels/PageViewModels.cs" />
   </ItemGroup>
 

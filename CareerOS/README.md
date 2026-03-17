@@ -9,15 +9,24 @@ Site profissional para acompanhar estudos, sessões, pomodoro, prática técnica
 - SQLite (EF Core)
 - Arquitetura em camadas: Controllers, Services, Data, Models, ViewModels, Views
 
-## Funcionalidades
-- Dashboard com métricas e progresso
-- Estudos (matérias/tópicos)
-- Sessões de estudo + Pomodoro
-- Prática de programação
-- Metas semanais/mensais
-- Integração GitHub
-- Resumo profissional com exportação TXT
-- Configurações visuais (tema escuro)
+## Segurança implementada
+- Anti-CSRF global (`AutoValidateAntiforgeryToken`) em POST/PUT/DELETE
+- Token CSRF para chamadas JavaScript (Pomodoro)
+- Sessão com cookie `HttpOnly`, `Secure`, `SameSite=Strict`
+- Rate limiting global por IP
+- Headers de segurança: CSP, `X-Frame-Options`, `X-Content-Type-Options`, Referrer Policy
+- Validação de input com DataAnnotations + sanitização server-side
+- Validação e normalização de username do GitHub
+
+## Configurar com **seu GitHub**
+No `appsettings.json`, altere:
+```json
+"GitHub": {
+  "DefaultUsername": "SEU_USUARIO"
+}
+```
+
+Você também pode salvar seu username na tela **Configurações**, com validação.
 
 ## Como rodar
 ```bash
@@ -26,7 +35,7 @@ dotnet restore
 dotnet run
 ```
 
-Acesse: `http://localhost:5000` (ou porta exibida no terminal).
+Acesse: `https://localhost:5001` (ou URL exibida no terminal).
 
 ## Publicar para Windows
 ```powershell

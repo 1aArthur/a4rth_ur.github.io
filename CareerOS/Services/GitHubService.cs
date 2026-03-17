@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 using CareerOS.Models;
 
@@ -11,23 +12,27 @@ public interface IGitHubService
 public class GitHubService : IGitHubService
 {
     private readonly HttpClient _httpClient;
+
     public GitHubService(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("CareerOSWeb/1.0");
     }
 
     public async Task<List<GitHubRepo>> GetReposAsync(string username)
     {
-        if (string.IsNullOrWhiteSpace(username)) return [];
+        if (!InputValidator.IsValidGitHubUsername(username)) return [];
+
+        var safeUser = InputValidator.NormalizeGitHubUsername(username);
+        var encodedUser = WebUtility.UrlEncode(safeUser);
 
         try
         {
-            var response = await _httpClient.GetAsync($"https://api.github.com/users/{username}/repos?sort=updated");
+            using var response = await _httpClient.GetAsync($"https://api.github.com/users/{encodedUser}/repos?sort=updated&per_page=20");
             if (!response.IsSuccessStatusCode) return [];
 
             await using var stream = await response.Content.ReadAsStreamAsync();
             using var doc = await JsonDocument.ParseAsync(stream);
+
             return doc.RootElement.EnumerateArray().Select(x => new GitHubRepo
             {
                 Name = x.GetProperty("name").GetString() ?? string.Empty,
